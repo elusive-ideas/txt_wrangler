@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='txt-wrangler',
-    version='0.1dev',
+    version='0.0.1dev',
     author="David Martinez",
     author_email="david.martinez.anim@gmail.com",
     packages=['txt_wrangler',],
