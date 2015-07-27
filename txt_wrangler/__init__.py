@@ -1,3 +1,5 @@
+import os.path
+
 def get_block_lines(file_name, start_pattern, end_pattern, from_line=1):
     '''
     Get the first and last line of a block that meets the pattern provided in
@@ -18,13 +20,17 @@ def get_block_lines(file_name, start_pattern, end_pattern, from_line=1):
     first = 0
     last = 0
 
-    # TODO: Check file existence
-    # TODO: Make sure that 'from_line' is never negative
+    # Check file existence
+    assert os.path.isfile(file_name), ("The file specified does not exist: "
+                                       "'%s'" % file_name)
+
+    # Make sure that 'from_line' is higher or equal to 1
+    assert from_line >=1, ("The value for 'from_line' must be higher or equal "
+                           "to 1. Current value: %s" % from_line)
 
     with open(file_name,'r') as f:
         all_lines = f.readlines()
 
-    
     line_num = 1
     for line in all_lines:
         if line_num < from_line:
@@ -62,9 +68,17 @@ def get_lines(file_name, first=1, last=1):
 
     '''
 
-    # TODO: Check file existence
-    # TODO: Make sure that first is never negative
-    # TODO: Make sure that 'last' is never smaller than 'first'
+    # Check file existence
+    assert os.path.isfile(file_name), ("The file specified does not exist: "
+                                       "'%s'" % file_name)
+
+    # Make sure that 'first' is higher or equal to 1
+    assert first >=1, ("The value for 'first' must be higher or equal "
+                       "to 1. Current value: %s" % first)
+    
+    # Make sure that 'last' is never smaller than 'first'
+    assert last >= first, ("The value of 'last' should never be lower than "
+                           "'first'.")
 
     extracted_lines = list()
 

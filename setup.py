@@ -4,7 +4,7 @@ setup(
     name='txt-wrangler',
     description="Text Wrangler",
     url="https://github.com/davidmartinezanim/file_wrangler",
-    version='0.0.2dev',
+    version='0.0.2',
     author="David Martinez",
     author_email="david.martinez.anim@gmail.com",
     packages=['txt_wrangler',],
