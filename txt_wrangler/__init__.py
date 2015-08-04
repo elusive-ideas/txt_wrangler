@@ -1,4 +1,7 @@
 import os.path
+import block
+import cmd
+
 
 def get_block_lines(file_name, start_pattern, end_pattern, from_line=1):
     '''
@@ -75,7 +78,7 @@ def get_lines(file_name, first=1, last=1):
     # Make sure that 'first' is higher or equal to 1
     assert first >=1, ("The value for 'first' must be higher or equal "
                        "to 1. Current value: %s" % first)
-    
+
     # Make sure that 'last' is never smaller than 'first'
     assert last >= first, ("The value of 'last' should never be lower than "
                            "'first'.")
@@ -125,7 +128,7 @@ def get_blocks_in_file(file_name, start_pattern, end_pattern):
     while first:
         if not first and not last:
             break
-        
+
         block = get_lines(file_name, first, last)
         blocks.append(block)
         first, last = get_block_lines(file_name=file_name,
