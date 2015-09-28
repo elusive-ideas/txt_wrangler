@@ -1,7 +1,7 @@
 import os.path
 import block
 import cmd
-#comment Tomas
+
 
 def get_block_lines(file_name, start_pattern, end_pattern, from_line=1):
     '''
