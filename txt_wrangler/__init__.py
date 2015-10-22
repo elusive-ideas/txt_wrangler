@@ -1,6 +1,7 @@
 import os.path
 import block
 import cmd
+from cue.obj.hitem import HItem
 
 
 def get_block_lines(file_name, start_pattern, end_pattern, from_line=1):
@@ -137,3 +138,40 @@ def get_blocks_in_file(file_name, start_pattern, end_pattern):
                                       from_line=last+1)
 
     return blocks
+
+
+def get_hierarchy_from_file(file_name, start_pattern, end_pattern):
+    ''' Get hierarchy of a file name & sections.
+
+    Input:
+        file_name:      String  - Name of the file
+        start_pattern:  String  - Pattern that defines the block start
+        end_pattern:    String  - Pattern that defines the block end
+
+    Output:
+        root:           List of lists of strings - All, Name of root and sections
+        sections:       List of lists of strings - Only sections
+
+    '''
+    
+    blocks = list()
+    sections = list()
+
+    blocks = get_blocks_in_file(file_name,
+                                start_pattern,
+                                end_pattern)
+    
+    ind = file_name.rfind('\\')+1
+    ind1 = file_name.rfind('.')
+    fname = file_name[ind:ind1]
+    root = HItem(name=fname)
+
+    for bl in blocks:
+        for line in bl:
+            if 'name' in line:
+                ind = line.find('\'')+1
+                ind1 = line.rfind('\'')
+                line = line[ind:ind1]
+                sections.append(HItem(name=line, parent=root))
+
+    return root, sections
