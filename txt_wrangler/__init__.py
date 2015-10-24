@@ -23,6 +23,7 @@ def get_block_lines(file_name, start_pattern, end_pattern, from_line=1):
     all_lines = list()
     first = 0
     last = 0
+    new_file = ""
 
     # Check file existence
     assert os.path.isfile(file_name), ("The file specified does not exist: "
@@ -41,6 +42,10 @@ def get_block_lines(file_name, start_pattern, end_pattern, from_line=1):
             line_num += 1
             continue
         line = line.strip()
+        if 'load_file' in line:
+            new_file = line
+            last = line_num+1
+            break
         if not first:
             if line.endswith('\n'):
                 line = line[:-1]
@@ -54,9 +59,12 @@ def get_block_lines(file_name, start_pattern, end_pattern, from_line=1):
             if line == end_pattern:
                 last = line_num+1
 
+        if first and last:
+            break
+        
         line_num += 1
 
-    return first, last
+    return first, last, new_file
 
 
 def get_lines(file_name, first=1, last=1):
@@ -122,20 +130,30 @@ def get_blocks_in_file(file_name, start_pattern, end_pattern):
 
     blocks = list()
 
-    first, last = get_block_lines(file_name=file_name,
-                                  start_pattern=start_pattern,
-                                  end_pattern=end_pattern)
-
-    while first:
+    last = 0
+    f_new_file = 0
+    while True:
+        first, last, new_file = get_block_lines(file_name,
+                                            start_pattern,
+                                            end_pattern,
+                                            from_line=last+1)
+        if new_file:
+            f_new_file += 1
+            stack_put2 (file_name, last)
+            ind = new_file.find('\"')+1
+            ind1 = file_name.rfind('\"')
+            file_name = new_file[ind:ind1]
+            first = 0
+            last = 0
+            continue
         if not first and not last:
+            if f_new_file:
+                f_new_file -= 1
+                last, file_name = stack_get2()
+                continue
             break
-
         block = get_lines(file_name, first, last)
         blocks.append(block)
-        first, last = get_block_lines(file_name=file_name,
-                                      start_pattern=start_pattern,
-                                      end_pattern=end_pattern,
-                                      from_line=last+1)
 
     return blocks
 
@@ -157,15 +175,15 @@ def get_hierarchy_from_file(file_name, start_pattern, end_pattern):
     blocks = list()
     sections = list()
 
-    blocks = get_blocks_in_file(file_name,
-                                start_pattern,
-                                end_pattern)
-    
     ind = file_name.rfind('\\')+1
     ind1 = file_name.rfind('.')
     fname = file_name[ind:ind1]
     root = HItem(name=fname)
 
+    blocks = get_blocks_in_file(file_name,
+                                start_pattern,
+                                end_pattern)
+    
     for bl in blocks:
         for line in bl:
             if 'name' in line:
@@ -175,3 +193,18 @@ def get_hierarchy_from_file(file_name, start_pattern, end_pattern):
                 sections.append(HItem(name=line, parent=root))
 
     return root, sections
+
+
+############  FUNCTIONS - TOMAS  ##############################
+stack = list()
+def stack_put2 (a, b):
+    stack.append(a)
+    stack.append(b)
+    return
+
+def stack_get2 ():
+    a = stack [-1]
+    del stack [-1]
+    b = stack [-1]
+    del stack [-1]
+    return a, b
