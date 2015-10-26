@@ -1,0 +1,17 @@
+block_start
+    name = '3First'
+    legs = 8
+    author = 'Shakespeare'
+block_end
+
+block_start
+    name = '3Second'
+    legs = 13
+    author = 'Mr.Rilett'
+block_end
+
+block_start
+    name = '3Third'
+    legs = 22
+    author = 'Clarkson'
+block_end

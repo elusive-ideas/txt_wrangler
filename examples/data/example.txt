@@ -1,0 +1,19 @@
+block_start
+    name = 'ThisIsTheFirstBlock'
+    legs = 3
+    author = 'DavidMartinez'
+block_end
+
+load_file "D:\Python\examples\data\2File.txt"
+
+block_start
+    name = 'ThisIsTheSecondBlock'
+    legs = 23
+    author = 'JohnSmith'
+block_end
+
+block_start
+    name = 'ThisIsTheThirdBlock'
+    legs = 2
+    author = 'TonyStark'
+block_end

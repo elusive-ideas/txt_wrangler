@@ -1,0 +1,21 @@
+block_start
+    name = 'First'
+    legs = 8
+    author = 'Shakespeare'
+block_end
+
+block_start
+    name = 'Second'
+    legs = 13
+    author = 'Mr.Rilett'
+block_end
+
+
+
+load_file "D:\Python\examples\data\3File.txt"
+
+block_start
+    name = 'Third'
+    legs = 22
+    author = 'Clarkson'
+block_end
