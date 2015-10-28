@@ -1,139 +1,60 @@
+# Library
 import os.path
-import block
-import cmd
+import module_mgr as mm
+
+# Constants
+DIR_MODULES = r'.\modules'
 
 
-def get_block_lines(file_name, start_pattern, end_pattern, from_line=1):
-    '''
-    Get the first and last line of a block that meets the pattern provided in
-    the file specified (starting from the line provided).
+def load_modules():
+    # Registramos una lista con carpetas en las que se van a buscar modulos.
+    mm.register_paths([DIR_MODULES])
 
-    Input:
-        file_name:      String  - Name of the file
-        start_pattern:  String  - Pattern that defines the block start
-        end_pattern:    String  - Pattern that defines the block end
-        from_line:      Integer - Line from which the block is being searched
+    # Guardamos las carpetas registradas en una lista.
+    registered_paths = mm.registered_paths()
 
-    Output:
-        Tuple with 2 integers - First and Last line of the block found
+    # Anhadimos las carpetas registradas a PYTHONPATH de manera que podamos
+    # importar modulos de ellas desde nuestro codigo.
+    mm.add_folders_to_pythonpath(registered_paths)
 
-    '''
+    # Descubrimos modulos en las carpetas registradas (basicamente una lista
+    # de ficheros que podremos importar).
+    modules_discovered = mm.discover_modules()
 
-    all_lines = list()
-    first = 0
-    last = 0
+    # Importamos los modulos y guardamos una referencia en una lista llamada
+    # modules_loaded.
+    modules_loaded = mm.load_modules(modules_discovered)
+
+    # Devolvemos la lista de modulos que hemos importado (de manera que pueden
+    # ser utilizados desde otro procedimiento)
+    return modules_loaded
+
+
+def read_file(results, filename, start_block, end_block, modules):
 
     # Check file existence
-    assert os.path.isfile(file_name), ("The file specified does not exist: "
-                                       "'%s'" % file_name)
+    assert os.path.isfile(filename), ("The file specified does not exist: "
+                                      "'%s'" % filename)
 
-    # Make sure that 'from_line' is higher or equal to 1
-    assert from_line >=1, ("The value for 'from_line' must be higher or equal "
-                           "to 1. Current value: %s" % from_line)
-
-    with open(file_name,'r') as f:
+    # Abrimos el fichero
+    with open(filename, 'r') as f:
+        # Leemos lineas del fichero
         all_lines = f.readlines()
 
-    line_num = 1
-    for line in all_lines:
-        if line_num < from_line:
-            line_num += 1
-            continue
-        line = line.strip()
-        if not first:
-            if line.endswith('\n'):
-                line = line[:-1]
-            if line == start_pattern:
-                first = line_num
-                continue
-
-        if first and not last:
-            if line.endswith('\n'):
-                line = line[:-1]
-            if line == end_pattern:
-                last = line_num+1
-
+    line_num = 0
+    for current in all_lines:
+        current = current.strip()
         line_num += 1
-
-    return first, last
-
-
-def get_lines(file_name, first=1, last=1):
-    ''' Get lines from a text file
-
-    Input:
-        file_name:   String  - Name of the file
-        first:       Integer - First line to be read
-        last:        Integer - Last line to be read
-
-    Output:
-        List of strings
-
-    '''
-
-    # Check file existence
-    assert os.path.isfile(file_name), ("The file specified does not exist: "
-                                       "'%s'" % file_name)
-
-    # Make sure that 'first' is higher or equal to 1
-    assert first >=1, ("The value for 'first' must be higher or equal "
-                       "to 1. Current value: %s" % first)
-
-    # Make sure that 'last' is never smaller than 'first'
-    assert last >= first, ("The value of 'last' should never be lower than "
-                           "'first'.")
-
-    extracted_lines = list()
-
-    with open(file_name,'r') as f:
-        all_lines = f.readlines()
-        number_of_lines = len(all_lines) + 1
-
-        # Make sure the requested lines fall within the length of the file
-        if not (first >= 0 and (last >= first and last <= number_of_lines)):
-            raise ValueError('Lines out of boundaries..')
-
-        current_line_num = 1
-        for line in all_lines:
-            if current_line_num >= first and current_line_num <= last:
-                if line.endswith('\n'):
-                    extracted_lines.append(line[:-1])
-                else:
-                    extracted_lines.append(line)
-            current_line_num +=1
-
-
-    return extracted_lines
-
-
-def get_blocks_in_file(file_name, start_pattern, end_pattern):
-    ''' Get all blocks that meet the pattern provided in the file specified.
-
-    Input:
-        file_name:      String  - Name of the file
-        start_pattern:  String  - Pattern that defines the block start
-        end_pattern:    String  - Pattern that defines the block end
-
-    Output:
-        List of lists of strings
-
-    '''
-
-    blocks = list()
-
-    first, last = get_block_lines(file_name=file_name,
-                                  start_pattern=start_pattern,
-                                  end_pattern=end_pattern)
-
-    while first:
-        if not first and not last:
-            break
-
-        block = get_lines(file_name, first, last)
-        blocks.append(block)
-        first, last = get_block_lines(file_name=file_name,
-                                      start_pattern=start_pattern,
-                                      end_pattern=end_pattern,
-                                      from_line=last+1)
-
-    return blocks
+        # Si se han encontrado modulos a cargar dinamicamente
+        if modules:
+            # Por cada uno de esos modulos..
+            for module in modules:
+                # Llamamos a main.
+                # En el caso de que no se pueda ejecutar (por ejemplo al no
+                # estar implementada la funcion Main), cazamos la excepcion
+                # para que eso nodetenga el programa. Es decir, seguira
+                # ejecutando otros modulos encontrados tras mostrar el error
+                try:
+                    module.main(all_lines, line_num, current, start_block, end_block, results, modules)
+                except Exception, e:    
+                    print "An exception has ocurred:", e
