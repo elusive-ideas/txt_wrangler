@@ -1,5 +1,5 @@
 block_start
-    name = 'ThisIsTheFirstBlock'
+    name = '1FirstBlock'
     legs = 3
     author = 'DavidMartinez'
 block_end
@@ -7,13 +7,15 @@ block_end
 load_file "D:\Python\examples\data\2File.txt"
 
 block_start
-    name = 'ThisIsTheSecondBlock'
+    name = '1SecondBlock'
     legs = 23
     author = 'JohnSmith'
 block_end
 
+// Comment ...
+
 block_start
-    name = 'ThisIsTheThirdBlock'
+    name = '1ThirdBlock'
     legs = 2
     author = 'TonyStark'
 block_end
