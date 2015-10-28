@@ -30,7 +30,8 @@ tw.read_file(results, FILE_WORK, START_BLOCK, END_BLOCK, modules)
 
 for line in results:
 	if FILTER in line:
-		out.append(line[len(FILTER):])
+		print line
+		out.append(line[1:])
 
 print "===  All Blocks  ".ljust(80, "=")
 for line in out:

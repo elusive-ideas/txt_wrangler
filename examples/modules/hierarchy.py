@@ -9,8 +9,8 @@ def main(lines, line_num, current, start_block, end_block, results, modules):
             nline += 1
             if nline < line_num:
                 continue
-            if nline == line_num:
-                results.append(FILTER+"\'"+lines[nline].rpartition('\'')[0].rpartition('\'')[2]+"\'")
+            if 'name' in line:
+                results.append(FILTER+"\'"+line.rpartition('\'')[0].rpartition('\'')[2]+"\'")
             if end_block in line:
                 break
         # Make sure the end_block exist
