@@ -1,60 +1,68 @@
-# Library
 import os.path
 import module_mgr as mm
+import txt_wrangler as tw
 
-# Constants
-DIR_MODULES = r'.\modules'
+modules_folder = None
 
 
 def load_modules():
-    # Registramos una lista con carpetas en las que se van a buscar modulos.
-    mm.register_paths([DIR_MODULES])
-
-    # Guardamos las carpetas registradas en una lista.
+    mm.register_paths([modules_folder])
     registered_paths = mm.registered_paths()
-
-    # Anhadimos las carpetas registradas a PYTHONPATH de manera que podamos
-    # importar modulos de ellas desde nuestro codigo.
     mm.add_folders_to_pythonpath(registered_paths)
-
-    # Descubrimos modulos en las carpetas registradas (basicamente una lista
-    # de ficheros que podremos importar).
     modules_discovered = mm.discover_modules()
-
-    # Importamos los modulos y guardamos una referencia en una lista llamada
-    # modules_loaded.
     modules_loaded = mm.load_modules(modules_discovered)
-
-    # Devolvemos la lista de modulos que hemos importado (de manera que pueden
-    # ser utilizados desde otro procedimiento)
     return modules_loaded
 
 
-def read_file(results, filename, start_block, end_block, modules):
-
-    # Check file existence
+def read_file(filename, results=list(), start_line=None, end_line=None):
     assert os.path.isfile(filename), ("The file specified does not exist: "
                                       "'%s'" % filename)
 
-    # Abrimos el fichero
+    dict_from_file = None
+    whole_file = True
+    if start_line is not None and end_line is not None:
+        whole_file = False
+
+    modules = tw.load_modules()
+
     with open(filename, 'r') as f:
-        # Leemos lineas del fichero
         all_lines = f.readlines()
 
     line_num = 0
+    test = None
     for current in all_lines:
-        current = current.strip()
         line_num += 1
-        # Si se han encontrado modulos a cargar dinamicamente
-        if modules:
-            # Por cada uno de esos modulos..
-            for module in modules:
-                # Llamamos a main.
-                # En el caso de que no se pueda ejecutar (por ejemplo al no
-                # estar implementada la funcion Main), cazamos la excepcion
-                # para que eso nodetenga el programa. Es decir, seguira
-                # ejecutando otros modulos encontrados tras mostrar el error
-                try:
-                    module.main(all_lines, line_num, current, start_block, end_block, results, modules)
-                except Exception, e:    
-                    print "An exception has ocurred:", e
+        if test:
+            if line_num < test:
+                continue
+        if whole_file is False:
+            if line_num < start_line:
+                continue
+            if line_num > end_line:
+                break
+
+        current = current.strip()
+        if not modules:
+            return {"file": [{"filename": filename}, {"content": []}]}
+
+        for module in modules:
+            try:
+                test = module.main(filename,
+                                   all_lines,
+                                   line_num,
+                                   current,
+                                   results)
+
+                if test:
+                    break
+            except Exception, e:
+                print "An exception has ocurred:", e
+
+    if whole_file:
+        dict_from_file = {"file": [{"filename": filename},
+                                   {"content": results}]}
+
+    else:
+        dict_from_file = results
+
+    return dict_from_file

@@ -1,0 +1,21 @@
+block_start
+    name = '2FirstBlock'
+    legs = 8
+    author = 'Mr. Brown'
+block_end
+
+// Comment between blocks (in file)
+
+block_start
+    name = '2SecondBlock'
+    legs = 13
+    author = 'Mr. Lewis'
+block_end
+
+load_file ".\data\3rd.txt"
+
+block_start
+    name = '2ThirdBlock'
+    legs = 22
+    author = 'Martin'
+block_end

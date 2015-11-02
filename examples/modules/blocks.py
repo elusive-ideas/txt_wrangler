@@ -1,23 +1,25 @@
-######
-FILTER = "_bk: "
+import txt_wrangler as tw
+
+start_block = 'block_start'
+end_block = 'block_end'
 
 
-# Requeriments: lines, line_num, current, start_block, end_block... results.
-def main(lines, line_num, current, start_block, end_block, results, modules):
-    if start_block in current:
-        out = list()
+def main(filename, lines, line_num, current, results):
+    if current.startswith(start_block):
         nline = 0
         for line in lines:
+
             nline += 1
             if nline < line_num:
                 continue
-            if nline == line_num:
-                out.append(FILTER)
-            line = line.rstrip()
-            out.append(line)
-            if end_block in line:
-               break
-        results.extend([out])
-        # Make sure the end_block exist
-        if not (end_block in line):
-            raise ValueError('Lines out of boundaries..')
+            if line.startswith(end_block):
+                break
+
+        nested_result = list()
+        tw.read_file(filename,
+                     start_line=line_num+1,
+                     end_line=nline-1,
+                     results=nested_result)
+
+        results.append({"Block": nested_result})
+        return nline+1

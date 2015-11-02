@@ -1,0 +1,22 @@
+block_start
+    name = '1FirstBlock'
+    legs = 3
+    // Comment in block
+    author = 'David Martinez'
+block_end
+
+load_file ".\data\2nd.txt"
+
+block_start
+    name = '1SecondBlock'
+    legs = 23
+    author = 'John Smith'
+block_end
+
+// Comment between blocks
+
+block_start
+    name = '1ThirdBlock'
+    legs = 2
+    author = 'Tony Stark'
+block_end
