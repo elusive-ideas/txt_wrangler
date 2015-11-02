@@ -8,3 +8,4 @@ def main(filename, lines, line_num, current, results):
 
         dict_from_file = tw.read_file(new_filename, results=list())
         results.append(dict_from_file)
+    return
