@@ -3,6 +3,6 @@ find_str = "legs"
 
 def main(filename, lines, line_num, current, results):
     if current.startswith(find_str):
-        value = current.rpartition('=')[2].strip()
+        value = int(current.rpartition('=')[2].strip())
         results.append({find_str: value})
         return
