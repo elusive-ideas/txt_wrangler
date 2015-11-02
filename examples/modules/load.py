@@ -4,7 +4,6 @@ import txt_wrangler as tw
 def main(filename, lines, line_num, current, results):
 
     if current.startswith('load_file'):
-        print "LOAD FILE - running.."
         new_filename = current.rpartition('"')[0].rpartition('"')[2]
 
         dict_from_file = tw.read_file(new_filename, results=list())
