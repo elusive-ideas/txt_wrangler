@@ -21,5 +21,5 @@ def main(filename, lines, line_num, current, results):
                      end_line=nline-1,
                      results=nested_result)
 
-        results.append({"Block": nested_result})
+        results.append({"type": "block", "value": nested_result})
         return nline+1
