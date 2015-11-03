@@ -8,6 +8,7 @@ Once the dictionary is retrieved, it is printed.
 import txt_wrangler as tw
 import os
 
+'''
 # ###################################################################
 tab = 0
 
@@ -34,7 +35,7 @@ def f_lista(datos):
         else:
             print val
 # ###################################################################
-
+'''
 
 # Defines path to the main file to analyse as well as the modules path
 os.chdir(__file__.rpartition(os.sep)[0])
@@ -43,11 +44,13 @@ tw.modules_folder = r'.\modules'
 
 # Reads the file using text_wrangler
 contents_dictionary = tw.read_file(main_file)
+import json
+print json.dumps(contents_dictionary, indent=4)
 
 # Prints the results
 # Presenta los resultados del test
-print "===  Results  ".ljust(80, "=")
-print contents_dictionary
-print "===  Formated results  ".ljust(80, "=")
-f_dict(contents_dictionary)
-print '='*80
+# print "===  Results  ".ljust(80, "=")
+# print contents_dictionary
+# print "===  Formated results  ".ljust(80, "=")
+# f_dict(contents_dictionary)
+# print '='*80

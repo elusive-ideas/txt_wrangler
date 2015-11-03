@@ -43,7 +43,7 @@ def read_file(filename, results=list(), start_line=None, end_line=None):
 
         current = current.strip()
         if not modules:
-            return {"file": filename, "content": []}
+            return {"type": "file", "file": filename, "value": []}
 
         for module in modules:
             try:
@@ -59,7 +59,7 @@ def read_file(filename, results=list(), start_line=None, end_line=None):
                 print "An exception has ocurred:", e
 
     if whole_file:
-        dict_from_file = {"file": filename,"content": results}
+        dict_from_file = {"type": "file", "file": filename, "value": results}
 
     else:
         dict_from_file = results
