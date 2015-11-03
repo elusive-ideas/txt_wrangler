@@ -1,8 +1,11 @@
 import txt_wrangler as tw
-find_str = "legs"
+
+pattern = 'legs'
+storage_str = 'legs'
+
 
 def main(filename, lines, line_num, current, results):
-    if current.startswith(find_str):
+    if current.startswith(pattern):
         value = int(current.rpartition('=')[2].strip())
-        results.append({"type": find_str, "value": value})
+        results.append({"type": storage_str, "value": value})
         return
