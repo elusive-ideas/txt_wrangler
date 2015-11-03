@@ -1,5 +1,3 @@
-import txt_wrangler as tw
-
 pattern = '"name'
 storage_str = 'name'
 

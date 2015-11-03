@@ -1,5 +1,3 @@
-import txt_wrangler as tw
-
 patterns = ('//', ';;')
 storage_str = 'comment'
 

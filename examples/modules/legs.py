@@ -1,5 +1,3 @@
-import txt_wrangler as tw
-
 pattern = 'legs'
 storage_str = 'legs'
 
