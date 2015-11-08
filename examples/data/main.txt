@@ -5,7 +5,7 @@ block_start
     author = 'David Martinez'
 block_end
 
-load_file ".\data\2nd.txt"
+load_file "D:\Desarrollo\txt_wrangler\examples\data\2nd.txt"
 
 block_start
     name = '1SecondBlock'

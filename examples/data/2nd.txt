@@ -12,7 +12,7 @@ block_start
     author = 'Mr. Lewis'
 block_end
 
-load_file ".\data\3rd.txt"
+load_file "D:\Desarrollo\txt_wrangler\examples\data\3rd.txt"
 
 block_start
     name = '2ThirdBlock'
