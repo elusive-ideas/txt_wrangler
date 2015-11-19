@@ -17,8 +17,9 @@ def load_modules():
 
 
 def read_file(filename, results=list(), start_line=None, end_line=None):
-    assert os.path.isfile(filename), ("The file specified does not exist: "
-                                      "'%s'" % filename)
+    filepath = tw.file_folders+'\\'+filename
+    assert os.path.isfile(filepath), ("The file specified does not exist: "
+                                      "'%s'" % filepath)
 
     dict_from_file = None
     whole_file = True
@@ -27,7 +28,7 @@ def read_file(filename, results=list(), start_line=None, end_line=None):
 
     modules = tw.load_modules()
 
-    with open(filename, 'r') as f:
+    with open(filepath, 'r') as f:
         all_lines = f.readlines()
 
     line_num = 0
