@@ -1,10 +1,10 @@
-import os.path
+import os
 import module_mgr as mm
 import txt_wrangler as tw
 
 module_manager = mm.Manager()
 modules_folders = None
-file_folders = None
+files_relative_to = None
 
 
 def load_modules():
@@ -17,7 +17,7 @@ def load_modules():
 
 
 def read_file(filename, results=list(), start_line=None, end_line=None):
-    filepath = tw.file_folders+'\\'+filename
+    filepath = tw.files_relative_to+os.sep+filename
     assert os.path.isfile(filepath), ("The file specified does not exist: "
                                       "'%s'" % filepath)
 

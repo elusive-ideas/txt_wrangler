@@ -9,7 +9,7 @@ import txt_wrangler as tw
 import os
 
 # Defines path to the modules to be used
-tw.file_folders = r'data'
+tw.files_relative_to = r'data'
 tw.modules_folders = r'modules'
 main_file = r'main.txt'
 
