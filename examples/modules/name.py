@@ -1,4 +1,4 @@
-pattern = '"name'
+pattern = 'name'
 storage_str = 'name'
 
 

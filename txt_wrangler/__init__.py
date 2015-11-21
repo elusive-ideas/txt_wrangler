@@ -1,9 +1,10 @@
-import os.path
+import os
 import module_mgr as mm
 import txt_wrangler as tw
 
 module_manager = mm.Manager()
 modules_folders = None
+files_relative_to = None
 
 
 def load_modules():
@@ -16,8 +17,9 @@ def load_modules():
 
 
 def read_file(filename, results=list(), start_line=None, end_line=None):
-    assert os.path.isfile(filename), ("The file specified does not exist: "
-                                      "'%s'" % filename)
+    filepath = tw.files_relative_to+os.sep+filename
+    assert os.path.isfile(filepath), ("The file specified does not exist: "
+                                      "'%s'" % filepath)
 
     dict_from_file = None
     whole_file = True
@@ -26,7 +28,7 @@ def read_file(filename, results=list(), start_line=None, end_line=None):
 
     modules = tw.load_modules()
 
-    with open(filename, 'r') as f:
+    with open(filepath, 'r') as f:
         all_lines = f.readlines()
 
     line_num = 0
@@ -44,7 +46,7 @@ def read_file(filename, results=list(), start_line=None, end_line=None):
 
         current = current.strip()
         if not modules:
-            return {"type": "file", "file": filename, "value": []}
+            return {"type": "txt_file", "file": filename, "value": []}
 
         for module in modules:
             try:
@@ -60,7 +62,7 @@ def read_file(filename, results=list(), start_line=None, end_line=None):
                 print "An exception has ocurred:", e
 
     if whole_file:
-        dict_from_file = {"type": "file", "file": filename, "value": results}
+        dict_from_file = {"type": "txt_file", "file": filename, "value": results}
 
     else:
         dict_from_file = results
