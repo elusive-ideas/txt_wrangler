@@ -16,8 +16,12 @@ def load_modules():
     return modules_loaded
 
 
-def read_file(filename, results=list(), start_line=None, end_line=None):
-    filepath = tw.files_relative_to+os.sep+filename
+def read_file(filename, results=list(), start_line=None, end_line=None, first_call=False):
+    if first_call:
+        filepath = filename
+    else:
+        filepath = tw.files_relative_to+os.sep+filename
+
     assert os.path.isfile(filepath), ("The file specified does not exist: "
                                       "'%s'" % filepath)
 
